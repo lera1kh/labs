@@ -9,7 +9,6 @@ int degree(int x, int n) {
     }
     return y;
 }
-
 int atoi_implementation(char *m) {
     int n = 0;
     while (*m) {
@@ -18,7 +17,6 @@ int atoi_implementation(char *m) {
     }
     return n;
 }
-
 int strlen_implementation(char *c_str) {
     int count = 0;
     while (*c_str++) {
@@ -26,7 +24,6 @@ int strlen_implementation(char *c_str) {
     }
     return count;
 }
-
 void flag_h(int var) {
     if (var <= 100) {
         int i = 1;
@@ -74,8 +71,6 @@ void flag_e(int var) {
         printf("The number is incorrect. Please, enter number <= 10\n");
         return;
     }
-
-
     long long counter = 1;
     for (int i = 1; i <= 10; i++) {
         for (int j = 1; j <= var; j++) {
@@ -103,23 +98,19 @@ void flag_f(int var) {
     }
     printf("%lld \n", factorial);
 }
-
 int main(int argc, char** argv)
 {
     if (argc != 3) {
         printf("Wrong value,try again\n");
         return 0;
     }
-
     int quantity_of_symbols = strlen_implementation(argv[2]);
     if (quantity_of_symbols != 2) {
         printf("Wrong value,try again\n");
         return 0;
     }
-
     int var = 0, length = strlen_implementation(argv[1]);
     var = atoi_implementation(argv[1]);
-
     if ((argv[2][0] == '-' || argv[2][0] == '/') && var > 0) {
         if (argv[2][1] == 'h') {
             flag_h(var);
