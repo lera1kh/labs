@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int min(int x, int y){
+int min_el(int x, int y){
     if (x == y) return x;
     if (x < y) return x;
     return y;
@@ -45,7 +45,7 @@ int main(){
     for (;n < sizeB; n++){
         scanf("%d", &arrB[n]);
     }
-    int sizeC = min(sizeA, sizeB);
+    int sizeC = min_el(sizeA, sizeB);
     arrC = foo(arrA, arrB, sizeA, sizeB, sizeC);
     n = 0;
     p = arrC;
