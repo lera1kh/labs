@@ -1,144 +1,148 @@
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
+#include <limits.h>
 
-
-int degree(int x, int n) {
-    int y = x;
-    for (int i = 1; i < n; i++) {
-        y *= x;
+long long int factorial(long long int number) {
+    long long int result = 1;
+    if (number == 0 || number == 1) {
+        return 1;
+    } else {
+        for (int i = 1; i <= number; i++) {
+            if (LLONG_MAX / result > i) {
+                result *= i;
+            } else {
+                return -1;
+            }
+        }
+        return result;
     }
-    return y;
 }
-int atoi_implementation(char *m) {
-    int n = 0;
-    while (*m) {
-        n = (n << 3) + (n << 1) + (*m) - '0';
-        m++;
+double strToInt(char *number){
+    int res = 0;
+    for(int i = 0; number[i] != '\0'; i++){
+        res += number[i]-'0';
+        res *= 10;
     }
-    return n;
+    res /= 10;
+    return res;
 }
-int strlen_implementation(char *c_str) {
-    int count = 0;
-    while (*c_str++) {
-        count++;
-    }
-    return count;
-}
-void flag_h(int var) {
-    if (var <= 100) {
-        int i = 1;
-        while (var * i <= 100) {
-                printf("%d ", i * var);
-                i++;
+int symbolInInt(char *number){
+    for(int i = 0; number[i] != '\0'; i++){
+        if (number[i] == '-' && i == 0){
+            return 1;
+        }
+        if (number[i] < '0' || number[i] > '9'){
+            return 1;
         }
     }
-    else {
-        printf("The number is more than 100");
-    }
-    printf("\n");
+    return 0;
 }
-void flag_p(int var) {
-    int i;
-    if (var == 1) {
-        printf("Nomber is not prime\n");
-        return;
-    }
-    else if(var == 2) {
-        printf("Prime number\n");
-        return;
+int main(int argc, char *argv[]){
+    if (argc == 1){
+        printf("No arguments\n");
+        return 1;
     }
     else {
-        for (i = 2; i <= (var / 2 + 1); i++) {
-            if (var % i == 0) {
-                printf("Composite number\n");
-                return;
+        for (int i = 0; argv[2][i] != '\0'; i++) {
+            if (
+                    (argv[2][i] >= '0' && argv[2][i] <= '9') &&
+                    ((argv[1][0] == '-' || argv[1][0] == '/') &&
+                     (argv[1][1] == 'a' || argv[1][1] == 'e' ||
+                      argv[1][1] == 'f' || argv[1][1] == 'h' ||
+                      argv[1][1] == 'p' || argv[1][1] == 's'))
+                ) {
+                printf("Enter number the first, than the flag\n");
+                return 1;
             }
         }
     }
-    printf("Prime number\n");
-}
-void flag_s(int var, int length) {
-    int counter = degree(10, length);
-    while (counter > 0) {
-        var = var % counter;
-        counter /= 10;
-        printf("%d ", var / counter);
-    }
-    printf("\n");
-}
-void flag_e(int var) {
-    if (var > 10) {
-        printf("The number is incorrect. Please, enter number <= 10\n");
-        return;
-    }
-    long long counter = 1;
-    for (int i = 1; i <= 10; i++) {
-        for (int j = 1; j <= var; j++) {
-            counter = counter * i;
-            printf("%lld ", counter);
-        }
-        counter = 1;
-        printf("\n");
-    }
-}
-void flag_a(int var) {
-    int i = 1;
-    int sum = 0;
-    while (var > 0){
-        sum += i;
-        i++;
-        var--;
-    }
-    printf("%d\n", sum);
-}
-void flag_f(int var) {
-    long long factorial = 1;
-    while (var != 0) {
-        factorial *= var--;
-    }
-    printf("%lld \n", factorial);
-}
-int main(int argc, char** argv)
-{
     if (argc != 3) {
-        printf("Wrong value,try again\n");
-        return 0;
+        printf("Enter two arguments\n");
+        return 1;
     }
-    int quantity_of_symbols = strlen_implementation(argv[2]);
-    if (quantity_of_symbols != 2) {
-        printf("Wrong value,try again\n");
-        return 0;
+    else {if (symbolInInt(argv[1]) ) {
+        printf("Please,enter only positive numbers without symbols\n");
+         return 1;
+         }
     }
-    int var = 0, length = strlen_implementation(argv[1]);
-    var = atoi_implementation(argv[1]);
-    if ((argv[2][0] == '-' || argv[2][0] == '/') && var > 0) {
-        if (argv[2][1] == 'h') {
-            flag_h(var);
+    if (argv[2][0] != '-' && argv[2][0] != '/') {
+            printf("There must be symbol '-' or '/' before the flag\n");
+            return 1;
         }
-        else if (argv[2][1] == 'p') {
-            flag_p(var);
+        int num = 0;
+        num = strToInt(argv[1]);
+    if (strcmp(argv[2], "-h") == 0 || strcmp(argv[2], "/h") == 0) {
+            if (num > 100) {
+                printf("No multiples\n");
+            } else if (num == 0) {
+                printf("Divide by zero\n");
+            } else {
+                int i = 1;
+                int num_1 = 0;
+                while(num * i <= 100){
+                    num_1 = num * i;
+                    i++; 
+                    printf("%d ", num_1);
+                    }
+                }
+            return 0;
+        } 
+        else if (strcmp(argv[2], "-p") == 0 || strcmp(argv[2], "/p") == 0) {
+            if (num == 1 || num == 0) {
+                printf("Enter the number other than one or zero\n");
+                return 0;
+            } else {
+                for (int i = 2; i < floor(sqrt(num)); i++) {
+                    if (num % i == 0) {
+                        printf("Your number is composite\n");
+                        return 0;
+                    }
+                }
+                printf("Your number is prime\n");
+                return 0;
+            }
+        } else if (strcmp(argv[2], "-s") == 0 || strcmp(argv[2], "/s") == 0) {
+            for (int i = 0; argv[1][i] != '\0'; i++) {
+                printf("%c ", argv[1][i]);
+            }
+        } else if (strcmp(argv[2], "-e") == 0 || strcmp(argv[2], "/e") == 0) {
+            if (num == 0||num > 10) {
+                printf("Enter number more than 0 and less than 11\n");
+                return 1;
+            }  else {
+            long long int res = 1;
+            for (int i = 1; i <= 10; i++) {
+            printf("%d: ", i);
+                for (int j = 1; j <= num; j++) {
+                res = res * i;
+                printf("%lld ", res);
+                }
+            res = 1;
+            printf("\n");
+            }
         }
-        else if (argv[2][1] == 's') {
-            flag_s(var, length);
-        }
-        else if (argv[2][1] == 'e') {
-            flag_e(var);
-        }
-        else if (argv[2][1] == 'a') {
-            flag_a(var);
-        }
-        else if (argv[2][1] == 'f') {
-            flag_f(var);
-        }
-        else {
-            printf("Wrong value,try again\n");
+        } else if (strcmp(argv[2], "-a") == 0 || strcmp(argv[2], "/a") == 0) {
+            if (num == 0) {
+                printf("Enter number more than 0\n");
+                return 0;
+            } else {
+                int res = 0;
+                res = (num * (num + 1)) / 2;
+                printf("%d\n", res);
+                return 0;
+            }
+        } else if (strcmp(argv[2], "-f") == 0 || strcmp(argv[2], "/f") == 0) {
+            long long int fac = num;
+            fac = factorial(fac);
+            if (fac == -1) {
+                printf("Overflow\n");
+                return 0;
+            }
+            printf("%lld\n", fac);
+            return 0;
+        } else {
+            printf("Wrong argument\n");
             return 0;
         }
     }
-    else {
-        printf("Wrong value,try again\n");
-        return 0;
-    }
-
-    return 0;
-}
