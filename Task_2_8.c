@@ -1,28 +1,33 @@
-#include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
+#include <stdio.h>
+#include <stdarg.h>
 #include <math.h>
 
-double foo(double a, double b, double eps){
-    double c;
-    if (pow(a,2) - 3*a + 1 == 0) 
-    return a;
-    if (pow(b,2) - 3*b + 1 == 0) 
-    return b;
-    while ((b - a) > eps){
-        c = (b + a) / 2.;
-        if (pow(c,2) - 3.*c + 1. < 0.){
-            a = c;
-        }else {
-            b = c;
-        }
-    }
-    return (b + a) / 2.;
+double f(double x) {
+    return pow(x,2) - 3*x + 1 ;
 }
 
-void main(){
-    double a = 0.;
-    double b = 2.;
-    double eps = 0.01;
-    printf("%lf", foo(a, b, eps));
+double dihot(double a, double b, double eps, double (*func)(double)) {
+    double c;
+    if(a < b||eps < 0){
+    return NAN;
+    }
+    while (fabs(b) - fabs(a) > eps) {//a < b && eps>0
+        c = (a + b) / 2.0;
+        if (func(b) * func(c) < eps)
+            a = c;
+        else
+            b = c;
+    }
+    return (a + b) / 2.0;
+}
+
+int main(int argc, char *argv[]) {
+    double res = dihot(0, 2, -0.01, f);
+    if (isnan(res) != 0){
+        printf("Error\n");
+        return 1;
+    }
+    printf("%f", dihot(4, 2, 0.01, f));
+    return 0;
 }
