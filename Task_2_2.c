@@ -1,105 +1,103 @@
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <math.h>
 
-int flag_l(char *str) {
-    return strlen(str);
-}
-char *flag_r(char *str) {
-    int i, len;
-    len = strlen(str);
-    for (i = 0; i < len / 2; i++)
-    {
-        str[i] = str[i] ^ str[len - i - 1];
-        str[len - i - 1] = str[i] ^ str[len - i - 1];
-        str[i] = str[i] ^ str[len - i - 1];
+
+int strLength(const char *string) {
+    int count = 0;
+    while (string[count] != '\0') {
+        count++;
     }
-    return str;
-}
-char *flag_u(char *str) {
-    int i;
-    for (i = 0; i < strlen(str); i += 2)
-    {
-        str[i] = toupper(str[i]);
-    }
-    return str;
-}
-char *flag_n(char *str) {
-    char s_1[BUFSIZ];
-    char s_2[BUFSIZ];
-    char s_3[BUFSIZ];
-    int count_1 = 0, count_2 = 0,  count_3 = 0, i;
-    for(i = 0; i < strlen(str); i++)
-    {
-       if(isdigit(str[i]))
-       {
-            s_1[count_1++] = str[i];
-       }
-       else if(isalpha(str[i]))
-       {
-            s_2[count_2++] = str[i];
-       }
-       else
-       {
-            s_3[count_3++] = str[i];
-       }
-    }
-    str[0] = '\0';
-    strcat(str, s_1);
-    strcat(str, s_2);
-    strcat(str, s_3);
-    return str;
-}
-char *flag_c(char *str, char *str_2) {
-    return strcat(str, str_2);
+    return count;
 }
 
-int main(int argc, char** argv)
-{
-    if (argc < 3 || argc > 4) {
-        printf("Not correct input\n");
-        return -1;
+void strReverse(char *string) {
+    int len = strLength(string); 
+    char tmp;
+    for (int x = 0; x < len / 2; x++) {
+        tmp = string[x];
+        string[x] = string[len - x - 1];
+        string[len - x - 1] = tmp;
     }
+}
 
-    int counter = strlen(argv[2]);
-    if (counter != 2) {
-        printf("Not correct input\n");
-        return -1;
+short isLetter(char c) {
+    if (('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z')) {
+        return 1;
+    }
+    return 0;
+}
+
+short isDigit(char c) {
+    if ('0' <= c && c <= '9') {
+        return 1;
+    }
+    return 0;
+}
+
+int main(int argc, char *argv[]) {
+    char *cmd = argv[2];
+    char *string = argv[1];
+    if (
+            (argc != 3 && strcmp(cmd, "-c") != 0) ||
+            (argc != 4 && strcmp(cmd, "-c") == 0)
+            ) {
+        printf("Incorrect arguments\n");
+        return 1;
     }
 
 
-    if (argv[2][0] == '-' || argv[2][0] == '/') {
-        if (argv[2][1] == 'l' && argc == 3) {
-            printf("%d\n", flag_l(argv[1]));
-            return 0;
+    if (strcmp(cmd, "-l") == 0) {
+        printf("%d\n", strLength(string));
+    } else if (strcmp(cmd, "-r") == 0) {
+        strReverse(string);
+        printf("%s\n", string);
+    } else if (strcmp(cmd, "-u") == 0) {
+        for (int x = 0; x < strLength(string); x++) {
+            if (x % 2 != 0 &&'a' <= string[x] && string[x] <= 'z') {
+                string[x] = (char) (string[x] - 'a' + 'A');
+            }
         }
-        else if (argv[2][1] == 'r' && argc == 3) {
-            printf("%s\n", flag_r(argv[1]));
-            return 0;
+        printf("%s\n", string);
+    } else if (strcmp(cmd, "-n") == 0) {
+        int strLen = strLength(string);
+        char newString[strLen + 1];
+        int newStringIndex = 0;
+        for (int x = 0; x < strLen; x++) {
+            if (isDigit(string[x])) {
+                newString[newStringIndex] = string[x];
+                newStringIndex++;
+            }
         }
-        else if (argv[2][1] == 'u' && argc == 3) {
-            printf("%s\n", flag_u(argv[1]));
-            return 0;
+        for (int x = 0; x < strLen; x++) {
+            if (isLetter(string[x])) {
+                newString[newStringIndex] = string[x];
+                newStringIndex++;
+            }
         }
-        else if (argv[2][1] == 'n' && argc == 3) {
-            printf("%s\n", flag_n(argv[1]));
-            return 0;
+        for (int x = 0; x < strLen; x++) {
+            if (!isDigit(string[x]) && !isLetter(string[x])) {
+                newString[newStringIndex] = string[x];
+                newStringIndex++;
+            }
         }
-        else if (argv[2][1] == 'c' && argc == 4) {
-            printf("%s\n", flag_c(argv[1], argv[3]));
-            return 0;
+        newString[newStringIndex] = '\0';
+        printf("%s\n", newString);
+    } else if (strcmp(cmd, "-c") == 0) {
+        int firstStrLen = strLength(string);
+        int secondStrLen = strLength(argv[3]);
+        char newString[firstStrLen + secondStrLen + 1];
+        
+        for (int x = 0; x < firstStrLen; x++) {
+            newString[x] = string[x];
         }
-        else {
-            printf("Not correct input\n");
-            return -1;
+        for (int x = 0; x < secondStrLen + 1; x++) {
+            newString[firstStrLen + x] = argv[3][x];
         }
-        printf("%s\n", argv[1]);
-    }
-    else {
-        printf("Not correct input\n");
-        return -1;
+        printf("%s\n", newString);
+    } else {
+        printf("Incorrect command\n");
+        return 1;
     }
     return 0;
 }
